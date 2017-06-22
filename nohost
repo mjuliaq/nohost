@@ -1,0 +1,60 @@
+#!/usr/bin/perl 
+
+# nohost
+# opens a ssh connecion to a system using my own hosts file
+#
+# Copyright (c) 2017 Mariano Julia Quevedo <mjuliaq@guaca.net>
+# v1.0 20170622
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+my $debug = '0'; 
+print "debug enabled\n" if $debug;
+
+%hosts = (
+		HOST1 => "192.0.2.1",
+		HOST2 => "192.168.1.2",
+		HOST3 => "172.31.1.3",
+		HOST4 => "10.1.1.56",
+		HOST5 => "100.64.1.178",
+		HOST6 => "198.19.55.66",
+		HOST7 => "10.11.12.13",
+		HOST8 => "169.254.34.56"
+);
+
+if (@ARGV < 1) {
+  print STDERR "Usage: $0 <hostname>\n";
+  exit 1;
+}
+
+if (exists $ARGV[1]) {
+   print "Warning: Extra arguments ignored\n";
+}
+
+print "debug: User input is ".$ARGV[0]."\n" if $debug;
+
+my $host = (uc $ARGV[0]);
+print "debug: Uppercase string is: ".$host."\n" if $debug;
+
+if (exists ($hosts{$host})) {
+	print "Openning ssh connection to $hosts{$host}\n";
+    system("ssh ".$hosts{$host}."");
+}
+
+else{
+    print STDERR "Can\'t find IP address for host ".$ARGV[0]."\n";
+	exit 1;
+}
+
+exit 0;
